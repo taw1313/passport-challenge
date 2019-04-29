@@ -1,0 +1,26 @@
+{
+  "author": "Todd Wilson",
+  "license": "MIT",
+  "name": "passportchallenge",
+  "version": "0.1.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:prod": "node server.js",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
+    "client": "cd client && npm run start",
+    "install": "cd client && npm install",
+    "build": "cd client && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^3.6.1",
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.444.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "path": "^0.12.7"
+  }
+}
