@@ -22,8 +22,9 @@ module.exports = {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     updateFactory: (req, res) => {
-        console.log('DEBUG - factoryController - updateFactory()', req.body)
-        res.json('Done')
+        db.updateFactory( req.params, req.body )
+           .then( (data) => res.json(data) )
+           .catch( (err) => res.status(422).json(err) )
 
     },
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -146,7 +146,13 @@ module.exports = {
       let params = {
         TableName: factoriesTable.TableName,
         Key: queryObj,
-        updateObj,
+        UpdateExpression: 'set factoryName = :f, nodeMinRange = :n, nodeMaxRange = :x, childern = :a',
+        ExpressionAttributeValues: {
+          ':f': updateObj.factoryName,
+          ':n': updateObj.nodeMinRange,
+          ':x': updateObj.nodeMaxRange,
+          ':a': updateObj.childern
+        },
         ReturnValues: "UPDATED_NEW"
       }
 
