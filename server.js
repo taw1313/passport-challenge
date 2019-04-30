@@ -1,12 +1,14 @@
 require('dotenv').config()
-const AWS = require('aws-sdk')
+//TAW AWS const AWS = require('aws-sdk')
 const express = require('express')
 const bodyParser = require('body-parser')
+const app = express()
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
 
 
 const routes = require('./server/routes')
-const Factories = require('./server/models/factories')
-const app = express()
+const {createTable} = require('./server/models/factories')
 const PORT = process.env.PORT || 3001
 
 //
@@ -20,25 +22,24 @@ app.use(bodyParser.json())
 //
 app.use(routes)
 
-
-AWS.config.update({
-  region: 'us-east-2',
-  endpoing: 'http://localhost:8000'
+//
+// start listener for clients
+//
+let server = http.listen(PORT, () => {
+  console.log(`DEBUG - now listening on Port ${PORT}`)
 })
 
-let dynamodb = new AWS.DynamoDB()
-
-let params = Factories.factories
-dynamodb.createTable(params, (err, data) => {
-  if ( err && (err.code != 'ResourceInUseException')) 
-	console.log('ERROR - Unalble to create table. \n', JSON.stringify(err, null, 2))
-  else {
-    console.log('DEBUG - AWS DynomoDB table is ready ')
-    //
-    // start listener for clients
-    //
-    app.listen(PORT, () => {
-      console.log(`DEBUG - now listening on Port ${PORT}`)
+//
+// Create the AWS DynamoDB table
+//
+createTable()
+  .then( (res) => {
+    console.log('DEBUG - after promise ', res)
+    io.on('connection', () => {
+      console.log('a user is connected')
     })
-  }
-})
+
+  })
+  .catch( (err) => {
+    console.log('ERROR - Unalble to create table. \n', JSON.stringify(err, null, 2))
+  })
