@@ -5,12 +5,13 @@ import history from './history'
 import { socket } from './helpers/GlobalData'
 import Home from './pages/Home'
 
-require('dotenv').config()
+require('dotenv').config({ debug: process.env.DEBUG })
 
 class App extends Component {
 
     componentDidMount() {
         console.log('DEBUG - App in componentDidMount()', socket.connected)
+        console.log('DEBUG - App.js - env ', process.env)
         socket.on('connect', () => {
             console.log('DEBUG - App socket in connect ', socket.connected)
             console.log('DEBUG - App socket in connect ', socket.id)

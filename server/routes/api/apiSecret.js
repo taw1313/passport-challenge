@@ -2,7 +2,7 @@ require('dotenv').config()
 const jwt = require('jsonwebtoken')
 
 const createSecret = () => {
-    return process.env.APISECRET
+    return process.env.API_SECRET
 }
 
 module.exports = {
@@ -13,7 +13,7 @@ module.exports = {
         //
         // Allow testing without JWTs
         //
-        if ( process.env.APIWITHOUTTOKEN ) next()
+        if ( process.env.API_WITHOUT_TOKEN ) next()
         else {
             const io = req.app.get('socketio')
             const clientSockets = Object.keys(io.sockets.connected)

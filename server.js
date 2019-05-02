@@ -5,8 +5,6 @@ const app = express()
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 
-
-
 const routes = require('./server/routes')
 const {createTable} = require('./server/models/factories')
 const {createSocketEvents} = require('./server/socket/socketEvents')

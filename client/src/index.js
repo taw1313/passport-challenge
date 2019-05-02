@@ -1,9 +1,10 @@
-import React, {Component} from 'react'
+import React  from 'react'
 import ReactDOM from 'react-dom'
 //import './index.css';
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 
+/*
 import URL from 'url-parse'
 
 class SafeURL extends Component {
@@ -25,10 +26,8 @@ class SafeURL extends Component {
     }
 }
 
-//
-// Did not seem to help on injection testing
-//
-// ReactDOM.render(<SafeURL />, document.getElementById('root'))
+ReactDOM.render(<SafeURL />, document.getElementById('root'))
+*/
 
 ReactDOM.render(<App />, document.getElementById('root'))
 registerServiceWorker()
