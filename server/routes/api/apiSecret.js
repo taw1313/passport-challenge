@@ -2,7 +2,7 @@ require('dotenv').config()
 const jwt = require('jsonwebtoken')
 
 const createSecret = () => {
-    return process.env.API_SECRET
+    return process.env.REACT_APP_API_SECRET
 }
 
 module.exports = {
