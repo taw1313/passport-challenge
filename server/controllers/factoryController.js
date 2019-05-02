@@ -5,25 +5,37 @@ module.exports = {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     createFactory: (req, res) => {
-         db.createFactory( req.body ) 
-           .then( (data) => res.json(data) )
-           .catch( (err) => res.status(422).json(err) )
+        const io = req.app.get('socketio')
+        db.createFactory( req.body ) 
+            .then( (data) => {
+                io.sockets.emit('get_all_data')
+                res.json(data) 
+            })
+            .catch( (err) => res.status(422).json(err) )
     },
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     getAllFactories: (req, res) => {
+        const io = req.app.get('socketio')
         db.readAllFactories()
-           .then( (data) => res.json(data) )
-           .catch( (err) => res.status(422).json(err) )
+            .then( (data) => {
+                io.sockets.emit('get_all_data')
+                res.json(data) 
+            })
+            .catch( (err) => res.status(422).json(err) )
 
     },
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     updateFactory: (req, res) => {
+        const io = req.app.get('socketio')
         db.updateFactory( req.params, req.body )
-           .then( (data) => res.json(data) )
+            .then( (data) => {
+                io.sockets.emit('get_all_data')
+                res.json(data) 
+            })
            .catch( (err) => res.status(422).json(err) )
 
     },
@@ -31,17 +43,25 @@ module.exports = {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     getFactory: (req, res) => {
+        const io = req.app.get('socketio')
         db.readFactory( req.params )
-           .then( (data) => res.json(data) )
-           .catch( (err) => res.status(422).json(err) )
+            .then( (data) => {
+                io.sockets.emit('get_all_data')
+                res.json(data) 
+            })
+            .catch( (err) => res.status(422).json(err) )
 
     },
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     delFactory: (req, res) => {
+        const io = req.app.get('socketio')
         db.deleteFactory( req.params, req.body )
-           .then( (data) => res.json(data) )
+            .then( (data) => {
+               io.sockets.emit('get_all_data')
+               res.json(data) 
+            })
            .catch( (err) => res.status(422).json(err) )
     }
 }

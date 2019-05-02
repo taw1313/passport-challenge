@@ -15,9 +15,9 @@ class Factory extends Component {
     render() {
         return(
             <div>
-                Factory
-                {this.state.nodes.map( (n, i) => (
-                    <Node nodeData={n}/>
+                {`Factory: ${this.props.factoryData.factoryName}`}
+                {this.props.factoryData.childern.map( (child, i) => (
+                    <Node key={`node${i}`} nodeData={child}/>
                 ))}
             </div>
         )
