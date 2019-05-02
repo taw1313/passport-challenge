@@ -19,10 +19,12 @@
   "dependencies": {
     "aws-sdk": "^2.444.0",
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
     "http": "0.0.0",
+    "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.2.1",
     "moment": "^2.24.0",
