@@ -7,6 +7,6 @@ require('dotenv').config()
 //    socket will be set in the App react compent when mounted
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const apiInterface = process.env.REACT_APP_API_URL
-let socket = socketIOClient(apiInterface, {secure: true, rejectUnauthorized: false})
+let socket = socketIOClient(apiInterface)
 
 export { socket }

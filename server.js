@@ -2,10 +2,8 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
-// const http = require('http').Server(app)
 const cors = require('cors')
 const https = require('https')
-const io = require('socket.io')(https)
 const fs = require('fs')
 
 const routes = require('./server/routes')
@@ -39,19 +37,21 @@ app.use(bodyParser.json())
 //
 app.use(routes)
 
-//
-// create socket connection to client so server can send/emit updates
-//
-createSocketEvents( io )
-app.set('socketio',io)
 
 //
 // start listener for clients
 //
 //let server = http.listen(PORT, () => {
-https.createServer(credentials, app).listen(PORT, () => {
+let server = https.createServer(credentials, app).listen(PORT, () => {
   console.log(`DEBUG - now listening on Port ${PORT}`)
 })
+
+//
+// create socket connection for client so server can send/emit updates
+//
+const io = require('socket.io').listen(server)
+createSocketEvents( io )
+app.set('socketio',io)
 
 //
 // Create the AWS DynamoDB table

@@ -6,7 +6,11 @@ class Home extends Component {
     constructor() {
         super()
         this.state = {
-            factories: []
+            factories: [
+                {factoryName: 'test1', childern: [{nodeNum: 13}, {nodeNum: 15}]},
+                {factoryName: 'test2', childern: [{nodeNum: 23}, {nodeNum: 25}]},
+                {factoryName: 'test3', childern: [{nodeNum: 33}, {nodeNum: 35}]}
+            ]
         }
 
     }
