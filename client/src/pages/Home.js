@@ -83,15 +83,24 @@ class Home extends Component {
     render() {
         console.log('DEBUG - Home - render()')
         return(
-            <div>
-                <h1> Home Page </h1>
-                <button onClick={this.createAfactory} type='submit'>Create</button>
-                {this.state.factories.map( (f, i) => (
-                    <Factory key={`factory${i}`} factoryData={f}/>
-                ))}
+            <div className='container-fluid' position='relative'>
+                <div className='row'>
+                    <div className='col-sm-12 center-block text-center'>
+                        <h1> Root </h1>
+                        <button onClick={this.createAfactory} type='submit'>Create</button>
+                    </div>
+                </div>
+                <div className='row'>
+                    {this.state.factories.map( (f, i) => (
+                        <Factory key={`factory${i}`} factoryData={f} index={i}/>
+                    ))}
+                </div>
             </div>
         )
     }
 }
 
 export default Home
+/*
+            <div className='container-fluid' position='relative' float='left'>
+*/
