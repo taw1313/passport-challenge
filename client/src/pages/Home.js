@@ -7,27 +7,54 @@ import API from '../helpers/API'
 
 class Home extends Component {
     state = {
-        factories: [
-            {factoryName: 'test1', childern: [{nodeNum: 13}, {nodeNum: 15}]},
-            {factoryName: 'test2', childern: [{nodeNum: 23}, {nodeNum: 25}]},
-            {factoryName: 'test3', childern: [{nodeNum: 33}, {nodeNum: 35}]}
-        ]
+        factories: []
     }
 
     componentDidMount() {
-        socket.emit('initial_data')
-        socket.on('get_data', this.changeData)
-        socket.on('get_all_data', this.getData)
+        socket.on('connect', () => {
+            console.log('DEBUG - Home socket in connect ', socket.id)
+
+            API.getAllFactories()
+            .then( (res) => {
+                this.setState({factories: res.data.Items})
+            })
+            .catch( (err) => {
+                alert('Failed To retrieve all Factories')
+            })
+
+            socket.on('new_factory', this.newFactory)
+            socket.on('factory_updated', this.factoryChanged)
+            socket.on('factory_deleted', this.removeFactory)
+
+            /*  ToDo factory lock and unlock events
+            socket.on('factory_locked', this.lockFactory)
+            socket.on('factory_unlocked', this.unlockFactory)
+            */
+            
+        })
     }
 
-    changeData = (data) => {
-        console.log('DEBUG - changeData() ', data)
-        let factories = data.Items
+    newFactory = (factory) => {
+        let factories = this.state.factories
+        factories.push(factory)
+        this.setState({factories})
+    }
+
+    factoryChanged = (factory) => {
+        let factories = this.state.factories
+        factories = factories.map( (f) =>  {
+            return (f.factoryId === factory.factoryId) ? (factory) : f
+        })
+        this.setState({factories})
+    }
+
+    removeFactory = (factory) => {
+        let factories = this.state.factories
+        factories = factories.filter( (f) =>  f.factoryId !== factory.factoryId )
         this.setState({factories})
     }
 
     createAfactory = () => {
-        console.log('DEBUG - createAfactory() ')
         let factory = {
             "factoryId": uuidv1(), 
             "factoryName": "abc2123",
@@ -40,32 +67,21 @@ class Home extends Component {
               childern.push({nodeNum: Math.floor(Math.random()*(factory.nodeMaxRange-factory.nodeMinRange) + factory.nodeMinRange)})
           factory.childern = childern.slice(0)
         API.createFactory(factory)
+        .then( () => {
+            //
+            // Nothing to do but wait for the new_facgtory event to be recieved
+            //
+        })
         .catch( (err) => {
             alert('Failed To Create Factory')
         })
-    }
-
-    getData = () => {
-        console.log('DEBUG - getData() EMIT')
-        socket.emit('initial_data')
-        /*
-        //
-        // ToDo: This API call is only for testing above emit results in the server sending an update
-        //
-        API.getAllFactories()
-        .then( (res) => {
-            console.log('DEBUG - getAllFactories() ', res)
-        })
-        .catch( (err) => {
-            alert('Failed To get all factories')
-        })
-        */
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     render() {
+        console.log('DEBUG - Home - render()')
         return(
             <div>
                 <h1> Home Page </h1>

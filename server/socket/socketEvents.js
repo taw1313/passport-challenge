@@ -5,16 +5,14 @@ module.exports = {
     createSocketEvents: (io) => {
         io.on('connection', socket => {
             console.log('DEBUG - socket connection', socket.id)
-            //
-            // return the intial data
-            //
-            socket.on('initial_data', () => {
-                console.log('DEBUG - socket() initial_data event received')
-                db.readAllFactories()
-                  .then( (data) => {
-                      io.sockets.emit('get_data', data)
-                  })
+
+            socket.on('lock_factory', (factoryId) => {
+                io.sockets.emit('factory_locked', factoryId)
+            }),
+            socket.on('unlock_factory', (factoryId) => {
+                io.sockets.emit('factory_unlocked', factoryId)
             })
+
         })
     }
 }

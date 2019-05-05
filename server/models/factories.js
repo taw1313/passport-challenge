@@ -59,14 +59,13 @@ module.exports = {
   // }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   createFactory: (factoryObj) => {
-    console.log('DEBUG - createFactory() ', factoryObj)
     return new Promise( (resolve, reject) => {
       let params = {
         TableName: factoriesTable.TableName,
         Item: factoryObj
       }
       docClient.put(params, (err, data) => {
-        (err) ? reject(err) : resolve(data)
+        (err) ? reject(err) : resolve(factoryObj)
       })
     })
   },
@@ -157,7 +156,7 @@ module.exports = {
       }
 
       docClient.update(params, (err, data) => {
-        (err) ? reject(err) : resolve(data)
+        (err) ? reject(err) : resolve(updateObj)
       })
     })
   },
@@ -182,7 +181,7 @@ module.exports = {
       }
 
       docClient.delete(params, (err, data) => {
-        (err) ? reject(err) : resolve(data)
+        (err) ? reject(err) : resolve(queryObj)
       })
     })
   }
