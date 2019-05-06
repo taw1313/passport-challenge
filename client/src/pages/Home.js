@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import uuidv1 from 'uuid/v1'
 
+import Header from '../components/Header'
 import Factory from '../components/Factory'
 import {socket} from '../helpers/GlobalData'
 import API from '../helpers/API'
@@ -55,6 +56,7 @@ class Home extends Component {
     }
 
     createAfactory = () => {
+        console.log('DEBUG - Home.js createAfactory() ')
         let factory = {
             "factoryId": uuidv1(), 
             "factoryName": "abc2123",
@@ -83,17 +85,14 @@ class Home extends Component {
     render() {
         console.log('DEBUG - Home - render()')
         return(
-            <div className='container-fluid' position='relative'>
-                <div className='row'>
-                    <div className='col-sm-12 center-block text-center'>
-                        <h1> Root </h1>
-                        <button onClick={this.createAfactory} type='submit'>Create</button>
+            <div className='col-sm-12'> 
+                <Header createAfactory={this.createAfactory}/>
+                <div className='container-flex' position='relative' style={{paddingTop: 110}}>
+                    <div className='row' align='left' position='relative'>
+                        {this.state.factories.map( (f, i) => (
+                            <Factory key={`factory${i}`} factoryData={f} index={i}/>
+                        ))}
                     </div>
-                </div>
-                <div className='row'>
-                    {this.state.factories.map( (f, i) => (
-                        <Factory key={`factory${i}`} factoryData={f} index={i}/>
-                    ))}
                 </div>
             </div>
         )
@@ -102,5 +101,7 @@ class Home extends Component {
 
 export default Home
 /*
+                <div className='row container-fluid' style={{position: 'relative'}}>
+
             <div className='container-fluid' position='relative' float='left'>
 */

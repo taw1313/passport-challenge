@@ -12,8 +12,10 @@ class Node extends Component {
     }
 
     render() {
-        const lineRotate = (this.props.evenFactory) ? '45deg' : '-225deg'
-        const styleWrapper = {width: 400, marginTop: 150, marginLeft: 5, transform: `rotate(${lineRotate})` }
+        const lineRotate = (this.props.evenFactory) ? '15deg' : '-15deg'
+        const styleWrapper = (this.props.evenFactory) 
+                             ? {paddingTop: 30, width: 400, transform: `rotate(${lineRotate})` }
+                             : {paddingTop: 30, width: 400, transform: `rotate(${lineRotate})` }
         return(
             <div style={styleWrapper}>
                 <Slider.Range min={1} max={20000} 
@@ -33,18 +35,3 @@ class Node extends Component {
 }
 
 export default Node
-/*
-            <pre>
-                {`    Node: ${this.props.nodeData.nodeNum}`}
-            </pre>
-
-                <Slider min={0} max={120} value={this.state.value} onChange={this.onSliderChange}
-                    railStyle={{ height: 2 }}
-                    handleStyle={{
-                      height: 28, width: 28,
-                      marginLeft: -14, marginTop: -14,
-                      backgroundColor: "red", border: 0
-                    }}
-                    trackStyle={{ background: "none" }}
-                />
-*/
