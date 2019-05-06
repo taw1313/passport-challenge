@@ -6,6 +6,9 @@ import history from './history'
 import Home from './pages/Home'
 
 class App extends Component {
+     componentDidMount() {
+         console.log('DEBUG - App.js componentDidMount()')
+     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //

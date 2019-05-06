@@ -14,6 +14,7 @@ class Home extends Component {
     componentDidMount() {
         socket.on('connect', () => {
             console.log('DEBUG - Home socket in connect ', socket.id)
+            console.log('DEBUG - Home state ', this.state.factories)
 
             API.getAllFactories()
             .then( (res) => {
@@ -50,13 +51,20 @@ class Home extends Component {
     }
 
     removeFactory = (factory) => {
+        //
+        // ToDo:  Race condition if the socket message is recieved first before the API call is returned
+        //        then it is possible to attempt to remove the child component while it is still "waiting"
+        //        for the API ( which will cause a mem leak )
+        //    
+        //        Therefore I need to switch the logic up a bit... have the client send the initial emit to
+        //        server after the API is completed... and then have the server send a delete to all listners
+        //
         let factories = this.state.factories
         factories = factories.filter( (f) =>  f.factoryId !== factory.factoryId )
         this.setState({factories})
     }
 
     createAfactory = () => {
-        console.log('DEBUG - Home.js createAfactory() ')
         let factory = {
             "factoryId": uuidv1(), 
             "factoryName": "abc2123",
@@ -79,18 +87,32 @@ class Home extends Component {
         })
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    changeRange = (factoryId, sliderValues) => {
+        let factories = this.state.factories
+        factories = factories.map( (f) =>  {
+            if (f.factoryId === factoryId) {
+                f.nodeMinRange = sliderValues[0]
+                f.nodeMaxRange = sliderValues[1]
+            }
+            return f
+        })
+        this.setState({factories})
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     render() {
-        console.log('DEBUG - Home - render()')
         return(
             <div className='col-sm-12'> 
                 <Header createAfactory={this.createAfactory}/>
                 <div className='container-flex' position='relative' style={{paddingTop: 110}}>
                     <div className='row' align='left' position='relative'>
                         {this.state.factories.map( (f, i) => (
-                            <Factory key={`factory${i}`} factoryData={f} index={i}/>
+                            <Factory key={`factory${i}`} factoryData={f} index={i} changeRange={this.changeRange}/>
                         ))}
                     </div>
                 </div>

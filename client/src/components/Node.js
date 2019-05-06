@@ -4,11 +4,8 @@ import Slider, {createSliderWithTooltip} from 'rc-slider'
 import 'rc-slider/assets/index.css'
 
 class Node extends Component {
-    state = {
-        value: 0
-    }
-    onSliderChange = value => {
-        this.setState({value})
+    onSliderChange = sliderValues => {
+        this.props.changeRange(this.props.factoryId, sliderValues)
     }
 
     render() {
@@ -21,6 +18,7 @@ class Node extends Component {
                 <Slider.Range min={1} max={20000} 
                     marks={this.props.marks}
                     defaultValue={[this.props.min, this.props.max]}
+                    onChange={this.onSliderChange}
                     railStyle={{ height: 2 }}
                     handleStyle={{
                       height: 28, width: 28,

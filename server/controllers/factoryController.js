@@ -48,8 +48,8 @@ module.exports = {
         const io = req.app.get('socketio')
         db.updateFactory( req.params, req.body )
             .then( (data) => {
-                io.sockets.emit('factory_updated', data)
                 res.json('Success') 
+                io.sockets.emit('factory_updated', data)
             })
            .catch( (err) => res.status(422).json(err) )
     },
@@ -60,8 +60,8 @@ module.exports = {
         const io = req.app.get('socketio')
         db.deleteFactory( req.params, req.body )
             .then( (data) => {
-               io.sockets.emit('factory_deleted', data)
                res.json('Success') 
+               io.sockets.emit('factory_deleted', data)
             })
            .catch( (err) => res.status(422).json(err) )
     }

@@ -20,7 +20,7 @@ class Header extends Component {
                                 paddingTop: 0, paddingRight: 5, paddingBottom: 0, paddingLeft: 5,
                                 focus: '{outline: 0}'
                             }}>
-                        <i class='fas fa-industry fa-3x'></i>
+                        <i className='fas fa-industry fa-3x'></i>
                     </button>
                 </div>
             </div>

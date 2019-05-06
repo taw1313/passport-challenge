@@ -3,7 +3,6 @@ import Node from './Node'
 import API from '../helpers/API'
 
 import IconToGenerate from 'react-ionicons/lib/IosCogOutline'
-// import IconToRemove from 'react-ionicons/lib/IosRemoveCircleOutline'
 import IconToRemove from 'react-ionicons/lib/IosCutOutline'
 
 class Factory extends Component {
@@ -62,10 +61,12 @@ class Factory extends Component {
                 </div>
                 <div className='row col-sm-12 justify-content-start' style={{margin: 0, padding: 0, height: 100}}>
                     <Node 
+                        factoryId={this.props.factoryData.factoryId}
                         min={this.props.factoryData.nodeMinRange} 
                         max={this.props.factoryData.nodeMaxRange} 
                         marks={marks}
-                        evenFactory={evenFactory}/>
+                        evenFactory={evenFactory}
+                        changeRange={this.props.changeRange}/>
                 </div>
             </div>
         )
@@ -79,10 +80,12 @@ class Factory extends Component {
                 </div>
                 <div className='row col-sm-12 justify-content-end' style={{margin: 0, padding: 0, height: 100}}>
                     <Node 
+                        factoryId={this.props.factoryData.factoryId}
                         min={this.props.factoryData.nodeMinRange} 
                         max={this.props.factoryData.nodeMaxRange} 
                         marks={marks}
-                        evenFactory={evenFactory}/>
+                        evenFactory={evenFactory}
+                        changeRange={this.props.changeRange}/>
                 </div>
             </div>
         )
