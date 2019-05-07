@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import Node from './Node'
 import API from '../helpers/API'
 
-import IconToGenerate from 'react-ionicons/lib/IosCogOutline'
-import IconToRemove from 'react-ionicons/lib/IosCutOutline'
+import {socket} from '../helpers/GlobalData'
+import { MyGenerateButton, MyRemoveButton } from './Buttons'
 
 class Factory extends Component {
     state = {
@@ -15,6 +15,7 @@ class Factory extends Component {
         this.setState({removing: true})
         API.delFactory(this.props.factoryData.factoryId)
         .then( () => {
+            socket.emit('client_res_delFactory', this.props.factoryData.factoryId)
             this.setState({removing: false})
         })
         .catch( (err) => {
@@ -45,21 +46,29 @@ class Factory extends Component {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    render() {
+    createMarks = (evenFactory, childern) => {
         let marks = {}
-        let evenFactory = (this.props.index % 2)
         let txtRotate = (evenFactory) ? '-85deg' : '85deg'
-        this.props.factoryData.childern.forEach((c) => {
+        childern.forEach( (c) => {
             marks[c.nodeNum] = {style: {margin: 0, padding: 0, transform: `rotate(${txtRotate})`}, label: `${c.nodeNum}`}
         })
+        return marks
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    render() {
+        let evenFactory = (this.props.index % 2)
+        let marks = this.createMarks( evenFactory, this.props.factoryData.childern )
         if (evenFactory) {
         return(
             <div className='row col-sm-6 d-flex' style={{margin: 0, padding: 15, height: 200}}>
-                <div className='row col-sm-12 justify-content-start' style={{margin: 0, padding: 0, height: 60}}>
-                    <IconToGenerate fontSize='40px' rotate={this.state.generating} onClick={this.generateNewChildern}/>
-                    <IconToRemove fontSize='40px' shake={this.state.removing} onClick={this.deleteFactory}/>
+                <div className='row col-sm-12 justify-content-start' style={{margin: 10, padding: 0, height: 40, zIndex: 99}}>
+                    <MyRemoveButton action={this.deleteFactory} removing={this.state.removing} />
+                    <MyGenerateButton action={this.generateNewChildern} generating={this.state.generating}/>
                 </div>
-                <div className='row col-sm-12 justify-content-start' style={{margin: 0, padding: 0, height: 100}}>
+                <div className='row col-sm-12 justify-content-start' style={{margin: 10, padding: 10, height: 100}}>
                     <Node 
                         factoryId={this.props.factoryData.factoryId}
                         min={this.props.factoryData.nodeMinRange} 
@@ -74,11 +83,11 @@ class Factory extends Component {
         else {
         return(
             <div className='row col-sm-6 d-flex' style={{margin: 0, padding: 15, height: 200, borderRightStyle: 'ridge'}}>
-                <div className='row col-sm-12 justify-content-end' style={{margin: 0, padding: 0, height: 60}}>
-                    <IconToGenerate fontSize='40px' rotate={this.state.generating} onClick={this.generateNewChildern}/>
-                    <IconToRemove fontSize='40px' shake={this.state.removing} onClick={this.deleteFactory}/>
+                <div className='row col-sm-12 justify-content-end' style={{margin: 10, padding: 0, height: 40, zIndex: 99}}>
+                    <MyGenerateButton action={this.generateNewChildern} generating={this.state.generating}/>
+                    <MyRemoveButton action={this.deleteFactory} removing={this.state.removing} />
                 </div>
-                <div className='row col-sm-12 justify-content-end' style={{margin: 0, padding: 0, height: 100}}>
+                <div className='row col-sm-12 justify-content-end' style={{margin: 10, padding: 10, height: 100}}>
                     <Node 
                         factoryId={this.props.factoryData.factoryId}
                         min={this.props.factoryData.nodeMinRange} 

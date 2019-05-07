@@ -43,6 +43,7 @@ class Home extends Component {
     }
 
     factoryChanged = (factory) => {
+        console.log('DEBUG - factoryChanged', factory)
         let factories = this.state.factories
         factories = factories.map( (f) =>  {
             return (f.factoryId === factory.factoryId) ? (factory) : f
@@ -50,17 +51,9 @@ class Home extends Component {
         this.setState({factories})
     }
 
-    removeFactory = (factory) => {
-        //
-        // ToDo:  Race condition if the socket message is recieved first before the API call is returned
-        //        then it is possible to attempt to remove the child component while it is still "waiting"
-        //        for the API ( which will cause a mem leak )
-        //    
-        //        Therefore I need to switch the logic up a bit... have the client send the initial emit to
-        //        server after the API is completed... and then have the server send a delete to all listners
-        //
+    removeFactory = (factoryId) => {
         let factories = this.state.factories
-        factories = factories.filter( (f) =>  f.factoryId !== factory.factoryId )
+        factories = factories.filter( (f) =>  f.factoryId !== factoryId )
         this.setState({factories})
     }
 

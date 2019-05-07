@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import { MyCreateButton } from './Buttons'
 
 class Header extends Component {
     createFactory = () => {
@@ -13,15 +14,7 @@ class Header extends Component {
                     <h1> Passport Challenge </h1>
                 </div>
                 <div className='row justify-content-center' style={{padding: 10}}>
-                    <button onClick={this.createFactory} type='submit' 
-                            style={{
-                                backgroundColor: '#a0a2ca',
-                                borderRadius: '12px',
-                                paddingTop: 0, paddingRight: 5, paddingBottom: 0, paddingLeft: 5,
-                                focus: '{outline: 0}'
-                            }}>
-                        <i className='fas fa-industry fa-3x'></i>
-                    </button>
+                    <MyCreateButton action={this.createFactory}/>
                 </div>
             </div>
         )

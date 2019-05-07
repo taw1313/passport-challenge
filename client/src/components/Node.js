@@ -11,13 +11,14 @@ class Node extends Component {
     render() {
         const lineRotate = (this.props.evenFactory) ? '15deg' : '-15deg'
         const styleWrapper = (this.props.evenFactory) 
-                             ? {paddingTop: 30, width: 400, transform: `rotate(${lineRotate})` }
-                             : {paddingTop: 30, width: 400, transform: `rotate(${lineRotate})` }
+                             ? {paddingTop: 40, width: 400, transform: `rotate(${lineRotate})` }
+                             : {paddingTop: 40, width: 400, transform: `rotate(${lineRotate})` }
+        console.log('DEBUG - node.js min max', this.props.min, this.props.max)
         return(
             <div style={styleWrapper}>
                 <Slider.Range min={1} max={20000} 
                     marks={this.props.marks}
-                    defaultValue={[this.props.min, this.props.max]}
+                    value={[this.props.min, this.props.max]}
                     onChange={this.onSliderChange}
                     railStyle={{ height: 2 }}
                     handleStyle={{

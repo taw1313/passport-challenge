@@ -61,7 +61,12 @@ module.exports = {
         db.deleteFactory( req.params, req.body )
             .then( (data) => {
                res.json('Success') 
-               io.sockets.emit('factory_deleted', data)
+               //
+               // Due to a race condition do not send update to all clients
+               //   Let the client that initiated the del recieve the API response
+               //   Then let it emit a message that will result in all clients getting
+               //   the update
+               //
             })
            .catch( (err) => res.status(422).json(err) )
     }

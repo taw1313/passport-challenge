@@ -6,6 +6,9 @@ module.exports = {
         io.on('connection', socket => {
             console.log('DEBUG - socket connection', socket.id)
 
+            socket.on('client_res_delFactory', (factoryId) => {
+               io.sockets.emit('factory_deleted', factoryId)
+            }),
             socket.on('lock_factory', (factoryId) => {
                 io.sockets.emit('factory_locked', factoryId)
             }),
