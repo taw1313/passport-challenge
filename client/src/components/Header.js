@@ -9,7 +9,7 @@ class Header extends Component {
 
     render() {
         return(
-            <div className='container-flex fixed-top' style={{ background: '#23244b', color: 'white'}}>
+            <div className='container-flex fixed-top' style={{ background: '#23244b', color: 'white', zIndex: 2}}>
                 <div className='row justify-content-center'>
                     <h1> Passport Challenge </h1>
                 </div>
@@ -22,6 +22,3 @@ class Header extends Component {
 }
 
 export default Header
-/*
-            <div className='col-sm-12 center-block text-center' style={{position: 'fixed', height: 60}}>
-*/

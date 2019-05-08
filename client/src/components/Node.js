@@ -13,7 +13,6 @@ class Node extends Component {
         const styleWrapper = (this.props.evenFactory) 
                              ? {paddingTop: 40, width: 400, transform: `rotate(${lineRotate})` }
                              : {paddingTop: 40, width: 400, transform: `rotate(${lineRotate})` }
-        console.log('DEBUG - node.js min max', this.props.min, this.props.max)
         return(
             <div style={styleWrapper}>
                 <Slider.Range min={1} max={20000} 

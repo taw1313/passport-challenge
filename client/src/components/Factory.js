@@ -1,14 +1,17 @@
 import React, {Component} from 'react'
+import MediaQuery from 'react-responsive'
+
 import Node from './Node'
 import API from '../helpers/API'
-
+import FactoryNameModal from './Modals/FactoryName'
 import {socket} from '../helpers/GlobalData'
-import { MyGenerateButton, MyRemoveButton } from './Buttons'
+import { MyGenerateButton, MyRemoveButton, MyFactoryButton } from './Buttons'
 
 class Factory extends Component {
     state = {
         generating: false,
-        removing: false
+        removing: false,
+        showFactoryNameModal: false
     }
 
     deleteFactory = () => {
@@ -58,15 +61,55 @@ class Factory extends Component {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    changeName = () => {
+        //
+        // lock
+        //
+        this.setState({showFactoryNameModal: true})
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    closeFactoryNameModal = (modified, newFactoryName) => {
+        this.setState({showFactoryNameModal: false})
+        if (modified) {
+            let factory = this.props.factoryData
+            factory.factoryName = `${newFactoryName}`
+            API.updateFactory(factory)
+            .then( () => {
+            })
+            .catch( (err) => {
+                alert('ERROR - update failed')
+            })
+        }
+
+        //
+        //  unlock
+        //
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     render() {
         let evenFactory = (this.props.index % 2)
         let marks = this.createMarks( evenFactory, this.props.factoryData.childern )
-        if (evenFactory) {
-        return(
+        if (evenFactory) return(
             <div className='row col-sm-6 d-flex' style={{margin: 0, padding: 15, height: 200}}>
-                <div className='row col-sm-12 justify-content-start' style={{margin: 10, padding: 0, height: 40, zIndex: 99}}>
-                    <MyRemoveButton action={this.deleteFactory} removing={this.state.removing} />
-                    <MyGenerateButton action={this.generateNewChildern} generating={this.state.generating}/>
+                <FactoryNameModal 
+                    closeModal={this.closeFactoryNameModal}
+                    modalIsOpen={this.state.showFactoryNameModal}
+                    name={this.props.factoryData.factoryName}
+                />
+                <div className='row col-sm-12 d-flex' style={{margin: 10, padding: 0, height: 40, zIndex: 1}}>
+                    <div className='col-sm-6' style={{textAlign: 'start'}}>
+                        <MyRemoveButton action={this.deleteFactory} removing={this.state.removing} />
+                        <MyGenerateButton action={this.generateNewChildern} generating={this.state.generating}/>
+                    </div>
+                    <div className='col-sm-6' style={{textAlign: 'center'}}>
+                        <MyFactoryButton name={this.props.factoryData.factoryName} action={this.changeName}/>
+                    </div>
                 </div>
                 <div className='row col-sm-12 justify-content-start' style={{margin: 10, padding: 10, height: 100}}>
                     <Node 
@@ -79,13 +122,21 @@ class Factory extends Component {
                 </div>
             </div>
         )
-        }
-        else {
-        return(
+        else return(
             <div className='row col-sm-6 d-flex' style={{margin: 0, padding: 15, height: 200, borderRightStyle: 'ridge'}}>
-                <div className='row col-sm-12 justify-content-end' style={{margin: 10, padding: 0, height: 40, zIndex: 99}}>
-                    <MyGenerateButton action={this.generateNewChildern} generating={this.state.generating}/>
-                    <MyRemoveButton action={this.deleteFactory} removing={this.state.removing} />
+                <FactoryNameModal 
+                    closeModal={this.closeFactoryNameModal}
+                    modalIsOpen={this.state.showFactoryNameModal}
+                    name={this.props.factoryData.factoryName}
+                />
+                <div className='row col-sm-12 d-flex'style={{margin: 10, padding: 0, height: 40, zIndex: 1}}>
+                    <div className='col-sm-6' style={{textAlign: 'center'}}>
+                        <MyFactoryButton  name={this.props.factoryData.factoryName} action={this.changeName}/>
+                    </div>
+                    <div className='col-sm-6' style={{textAlign: 'end'}}>
+                        <MyGenerateButton action={this.generateNewChildern} generating={this.state.generating}/>
+                        <MyRemoveButton action={this.deleteFactory} removing={this.state.removing} />
+                    </div>
                 </div>
                 <div className='row col-sm-12 justify-content-end' style={{margin: 10, padding: 10, height: 100}}>
                     <Node 
@@ -98,8 +149,6 @@ class Factory extends Component {
                 </div>
             </div>
         )
-
-        }
     }
 }
 
