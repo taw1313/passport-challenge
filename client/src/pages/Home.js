@@ -8,16 +8,24 @@ import {socket} from '../helpers/GlobalData'
 import API from '../helpers/API'
 
 const Aux = props => props.children
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Home extends Component {
     state = {
         factories: [],
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     componentDidMount() {
         socket.on('connect', () => {
             API.getAllFactories()
             .then( (res) => {
                 this.setState({factories: res.data.Items})
+                socket.emit('loadedFactories')
             })
             .catch( (err) => {
                 alert('Failed To retrieve all Factories')
@@ -26,21 +34,21 @@ class Home extends Component {
             socket.on('new_factory', this.newFactory)
             socket.on('factory_updated', this.factoryChanged)
             socket.on('factory_deleted', this.removeFactory)
-
-            /*  ToDo factory lock and unlock events
-            socket.on('factory_locked', this.lockFactory)
-            socket.on('factory_unlocked', this.unlockFactory)
-            */
-            
         })
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     newFactory = (factory) => {
         let factories = this.state.factories
         factories.push(factory)
         this.setState({factories})
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     factoryChanged = (factory) => {
         let factories = this.state.factories
         factories = factories.map( (f) =>  {
@@ -49,12 +57,18 @@ class Home extends Component {
         this.setState({factories})
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     removeFactory = (factoryId) => {
         let factories = this.state.factories
         factories = factories.filter( (f) =>  f.factoryId !== factoryId )
         this.setState({factories})
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     createAfactory = () => {
         let factory = {
             "factoryId": uuidv1(), 
@@ -141,8 +155,3 @@ class Home extends Component {
 }
 
 export default Home
-/*
-                                <MediaQuery key={`dsk${i}`} minWidth={992}>
-                                <MediaQuery key={`dskScaled${i}`} maxWidth={991}>
-                                <MediaQuery key={`mobile${i}`} maxDeviceWidth={900}>
-                                */

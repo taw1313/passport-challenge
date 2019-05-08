@@ -11,13 +11,46 @@ const leftSingleTreeClass = 'row col-sm-12 d-flex'
 const leftDoubleTreeStyle = {margin: 0, padding: 15, height: 300, borderRightStyle: 'ridge'}
 const leftSingleTreeStyle = {marginRight: 50, padding: 15, height: 300, borderRightStyle: 'ridge'}
                 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Factory extends Component {
     state = {
         generating: false,
         removing: false,
-        showFactoryNameModal: false
+        showFactoryNameModal: false,
+        factoryLocked: false
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    componentDidMount() {
+        socket.on('factory_locked', this.lockButtons)
+        socket.on('factory_unlocked', this.unlockButtons)
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    lockButtons = (factoryId) => {
+        console.log('DEBUG - factoryLocked ', factoryId)
+        if ( this.props.factoryData.factoryId === factoryId )
+            this.setState({factoryLocked: true})
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    unlockButtons = (factoryId) => {
+        console.log('DEBUG - factoryUnLocked ', factoryId)
+        if ( this.props.factoryData.factoryId === factoryId )
+            this.setState({factoryLocked: false})
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     deleteFactory = () => {
         this.setState({removing: true})
         API.delFactory(this.props.factoryData.factoryId)
@@ -30,6 +63,9 @@ class Factory extends Component {
         })
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     generateNewChildern = () => {
         this.setState({generating: true})
         let ranNumOfChildern = Math.floor(Math.random()*15) + 1
@@ -69,6 +105,7 @@ class Factory extends Component {
         //
         // lock
         //
+        socket.emit('lock_factory', this.props.factoryData.factoryId)
         this.setState({showFactoryNameModal: true})
     }
 
@@ -91,6 +128,7 @@ class Factory extends Component {
         //
         //  unlock
         //
+        socket.emit('unlock_factory', this.props.factoryData.factoryId)
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,11 +147,11 @@ class Factory extends Component {
                 />
                 <div className='row col-sm-12 d-flex' style={{margin: 10, padding: 0, height: 40, zIndex: 1}}>
                     <div className='col-sm-6' style={{textAlign: 'start'}}>
-                        <MyRemoveButton action={this.deleteFactory} removing={this.state.removing} />
+                        <MyRemoveButton action={this.deleteFactory} removing={this.state.removing} locked={this.state.factoryLocked}/>
                         <MyGenerateButton action={this.generateNewChildern} generating={this.state.generating}/>
                     </div>
                     <div className='col-sm-6' style={{textAlign: 'center'}}>
-                        <MyFactoryButton nameLeft={false} name={this.props.factoryData.factoryName} action={this.changeName}/>
+                        <MyFactoryButton nameLeft={false} name={this.props.factoryData.factoryName} action={this.changeName} locked={this.state.factoryLocked}/>
                     </div>
                 </div>
                 <div className='row col-sm-12 justify-content-start' style={{margin: 10, padding: 10, height: 100}}>
@@ -140,11 +178,11 @@ class Factory extends Component {
                 />
                 <div className='row col-sm-12 d-flex'style={{margin: 10, padding: 0, height: 40, zIndex: 1}}>
                     <div className='col-sm-6' style={{textAlign: 'center'}}>
-                        <MyFactoryButton nameLeft={true} name={this.props.factoryData.factoryName} action={this.changeName}/>
+                        <MyFactoryButton nameLeft={true} name={this.props.factoryData.factoryName} action={this.changeName} locked={this.state.factoryLocked}/>
                     </div>
                     <div className='col-sm-6' style={{textAlign: 'end'}}>
                         <MyGenerateButton action={this.generateNewChildern} generating={this.state.generating}/>
-                        <MyRemoveButton action={this.deleteFactory} removing={this.state.removing} />
+                        <MyRemoveButton action={this.deleteFactory} removing={this.state.removing} locked={this.state.factoryLocked}/>
                     </div>
                 </div>
                 <div className='row col-sm-12 justify-content-end' style={{margin: 10, padding: 10, height: 100}}>
