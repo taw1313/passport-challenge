@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import MediaQuery from 'react-responsive'
 
 import Node from './Node'
 import API from '../helpers/API'
@@ -7,6 +6,11 @@ import FactoryNameModal from './Modals/FactoryName'
 import {socket} from '../helpers/GlobalData'
 import { MyGenerateButton, MyRemoveButton, MyFactoryButton } from './Buttons'
 
+const leftDoubleTreeClass = 'row col-sm-6 d-flex'
+const leftSingleTreeClass = 'row col-sm-12 d-flex'
+const leftDoubleTreeStyle = {margin: 0, padding: 15, height: 300, borderRightStyle: 'ridge'}
+const leftSingleTreeStyle = {marginRight: 50, padding: 15, height: 300, borderRightStyle: 'ridge'}
+                
 class Factory extends Component {
     state = {
         generating: false,
@@ -95,8 +99,9 @@ class Factory extends Component {
     render() {
         let evenFactory = (this.props.index % 2)
         let marks = this.createMarks( evenFactory, this.props.factoryData.childern )
+        let oneSidedTree = this.props.oneSidedTree
         if (evenFactory) return(
-            <div className='row col-sm-6 d-flex' style={{margin: 0, padding: 15, height: 200}}>
+            <div className='row col-sm-6 d-flex' style={{margin: 0, padding: 15, height: 300}}>
                 <FactoryNameModal 
                     closeModal={this.closeFactoryNameModal}
                     modalIsOpen={this.state.showFactoryNameModal}
@@ -108,7 +113,7 @@ class Factory extends Component {
                         <MyGenerateButton action={this.generateNewChildern} generating={this.state.generating}/>
                     </div>
                     <div className='col-sm-6' style={{textAlign: 'center'}}>
-                        <MyFactoryButton name={this.props.factoryData.factoryName} action={this.changeName}/>
+                        <MyFactoryButton nameLeft={false} name={this.props.factoryData.factoryName} action={this.changeName}/>
                     </div>
                 </div>
                 <div className='row col-sm-12 justify-content-start' style={{margin: 10, padding: 10, height: 100}}>
@@ -118,12 +123,16 @@ class Factory extends Component {
                         max={this.props.factoryData.nodeMaxRange} 
                         marks={marks}
                         evenFactory={evenFactory}
+                        oneSidedTree={oneSidedTree}
                         changeRange={this.props.changeRange}/>
                 </div>
             </div>
         )
         else return(
-            <div className='row col-sm-6 d-flex' style={{margin: 0, padding: 15, height: 200, borderRightStyle: 'ridge'}}>
+            <div 
+                className={oneSidedTree ? leftSingleTreeClass : leftDoubleTreeClass} 
+                style={oneSidedTree ? leftSingleTreeStyle : leftDoubleTreeStyle} 
+            >
                 <FactoryNameModal 
                     closeModal={this.closeFactoryNameModal}
                     modalIsOpen={this.state.showFactoryNameModal}
@@ -131,7 +140,7 @@ class Factory extends Component {
                 />
                 <div className='row col-sm-12 d-flex'style={{margin: 10, padding: 0, height: 40, zIndex: 1}}>
                     <div className='col-sm-6' style={{textAlign: 'center'}}>
-                        <MyFactoryButton  name={this.props.factoryData.factoryName} action={this.changeName}/>
+                        <MyFactoryButton nameLeft={true} name={this.props.factoryData.factoryName} action={this.changeName}/>
                     </div>
                     <div className='col-sm-6' style={{textAlign: 'end'}}>
                         <MyGenerateButton action={this.generateNewChildern} generating={this.state.generating}/>
@@ -145,6 +154,7 @@ class Factory extends Component {
                         max={this.props.factoryData.nodeMaxRange} 
                         marks={marks}
                         evenFactory={evenFactory}
+                        oneSidedTree={oneSidedTree}
                         changeRange={this.props.changeRange}/>
                 </div>
             </div>

@@ -22,9 +22,6 @@ const factoriesTable = {
   }
 }
 
-    // { AttributeName: 'factoryName', KeyType: 'RANGE' }    //Sort key
-    // { AttributeName: 'factoryName', AttributeType: 'S' }
-
 module.exports = {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -172,7 +169,6 @@ module.exports = {
   //
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   deleteFactory: (queryObj, delObj) => {
-    console.log('DEBUG - deleteFactory() ', queryObj, delObj)
     return new Promise( (resolve, reject) => {
       let params = {
         TableName: factoriesTable.TableName,

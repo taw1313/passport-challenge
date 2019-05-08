@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import { MyCreateButton } from './Buttons'
+import MediaQuery from 'react-responsive'
 
 class Header extends Component {
     createFactory = () => {
-        console.log('DEBUG - Header.js createAfactory() ')
         this.props.createAfactory()
     }
 
@@ -13,9 +13,21 @@ class Header extends Component {
                 <div className='row justify-content-center'>
                     <h1> Passport Challenge </h1>
                 </div>
-                <div className='row justify-content-center' style={{padding: 10}}>
-                    <MyCreateButton action={this.createFactory}/>
-                </div>
+                <MediaQuery minWidth={992}>
+                    <div className='row justify-content-center' style={{padding: 10}}>
+                        <MyCreateButton action={this.createFactory}/>
+                    </div>
+                </MediaQuery>
+                <MediaQuery minDeviceWidth={1224} maxWidth={991}>
+                    <div className='row' align='right' style={{padding: 10, float: 'right', marginRight: 10}}>
+                        <MyCreateButton action={this.createFactory}/>
+                    </div>
+                </MediaQuery>
+                <MediaQuery maxDeviceWidth={900}>
+                    <div className='row' align='right' style={{padding: 10, float: 'right', marginRight: 10}}>
+                        <MyCreateButton action={this.createFactory}/>
+                    </div>
+                </MediaQuery>
             </div>
         )
     }

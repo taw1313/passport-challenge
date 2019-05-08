@@ -4,8 +4,6 @@ module.exports = {
 
     createSocketEvents: (io) => {
         io.on('connection', socket => {
-            console.log('DEBUG - socket connection', socket.id)
-
             socket.on('client_res_delFactory', (factoryId) => {
                io.sockets.emit('factory_deleted', factoryId)
             }),

@@ -10,12 +10,10 @@ module.exports = {
         return createSecret()
     },
     verifyToken: (req, res, next) => {
-        console.log('DEBUG - verifyToken', process.env.API_WITH_TOKEN)
         //
         // Allow testing without JWTs
         //
         if ( process.env.API_WITH_TOKEN ) {
-            console.log('DEBUG - verifyToken before socketio get')
             //
             // ToDo: Need to move this logic to where the server sockets are being connected and disconnected
             //       and create a global "hash"
@@ -24,8 +22,6 @@ module.exports = {
             const clientSockets = Object.keys(io.sockets.connected)
             let hashOfKnownClients = new Object()
             for (let i=0; i<clientSockets.length; i++ ) hashOfKnownClients[clientSockets[i]]=true
-            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            console.log( 'DEBUG - hashOfKnownClients ', hashOfKnownClients )
 
             // Get auth header value
             const bearerHeader = req.headers['authorization']
@@ -35,9 +31,6 @@ module.exports = {
                 // Get token from array
                 const bearerToken = bearer[1]
                 jwt.verify(bearerToken, createSecret(), (err, decodedBearerToken) => {
-                    console.log( 'DEBUG - decodedBearerToken ', decodedBearerToken )
-                    console.log( 'DEBUG - decodedBearerToken is in known clients', hashOfKnownClients[decodedBearerToken.mySocket] )
-                    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
                     //
                     // if successfully decoded jwt and payload contained known socket connection ID then continue
                     //
@@ -56,7 +49,6 @@ module.exports = {
             }
         }
         else {
-            console.log('DEBUG - verifyToken before next')
             next()
         }
     }

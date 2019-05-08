@@ -1,21 +1,20 @@
 import React, {Component} from 'react'
 import uuidv1 from 'uuid/v1'
+import MediaQuery from 'react-responsive'
 
 import Header from '../components/Header'
 import Factory from '../components/Factory'
 import {socket} from '../helpers/GlobalData'
 import API from '../helpers/API'
 
+const Aux = props => props.children
 class Home extends Component {
     state = {
-        factories: []
+        factories: [],
     }
 
     componentDidMount() {
         socket.on('connect', () => {
-            console.log('DEBUG - Home socket in connect ', socket.id)
-            console.log('DEBUG - Home state ', this.state.factories)
-
             API.getAllFactories()
             .then( (res) => {
                 this.setState({factories: res.data.Items})
@@ -43,7 +42,6 @@ class Home extends Component {
     }
 
     factoryChanged = (factory) => {
-        console.log('DEBUG - factoryChanged', factory)
         let factories = this.state.factories
         factories = factories.map( (f) =>  {
             return (f.factoryId === factory.factoryId) ? (factory) : f
@@ -60,9 +58,9 @@ class Home extends Component {
     createAfactory = () => {
         let factory = {
             "factoryId": uuidv1(), 
-            "factoryName": "abc2123",
-            "nodeMinRange": 1,
-            "nodeMaxRange": 10000,
+            "factoryName": "Default Name",
+            "nodeMinRange": 1000,
+            "nodeMaxRange": 15000,
           } 
           let ranNumOfChildern = Math.floor(Math.random()*15) + 1
           let childern = []
@@ -101,11 +99,39 @@ class Home extends Component {
     render() {
         return(
             <div className='col-sm-12'> 
-                <Header createAfactory={this.createAfactory}/>
+                <Header createAfactory={this.createAfactory} />
                 <div className='container-flex' position='relative' style={{paddingTop: 110}}>
                     <div className='row' align='left' position='relative'>
                         {this.state.factories.map( (f, i) => (
-                            <Factory key={`factory${i}`} factoryData={f} index={i} changeRange={this.changeRange}/>
+                            <Aux key={`a${i}`}> 
+                                <MediaQuery key={`dsk${i}`} minWidth={992}>
+                                    <Factory 
+                                        key={`factoryA${i}`} 
+                                        factoryData={f} 
+                                        index={i} 
+                                        changeRange={this.changeRange}
+                                        oneSidedTree={false}
+                                    />
+                                </MediaQuery>
+                                <MediaQuery key={`dskScaled${i}`} minDeviceWidth={1224} maxWidth={991}>
+                                    <Factory 
+                                        key={`factoryB${i}`} 
+                                        factoryData={f} 
+                                        index={0} 
+                                        changeRange={this.changeRange}
+                                        oneSidedTree={true}
+                                    />
+                                </MediaQuery>
+                                <MediaQuery key={`mobile${i}`} maxDeviceWidth={900}>
+                                    <Factory 
+                                        key={`factoryB${i}`} 
+                                        factoryData={f} 
+                                        index={0} 
+                                        changeRange={this.changeRange}
+                                        oneSidedTree={true}
+                                    />
+                                </MediaQuery>
+                            </Aux>
                         ))}
                     </div>
                 </div>
@@ -116,7 +142,7 @@ class Home extends Component {
 
 export default Home
 /*
-                <div className='row container-fluid' style={{position: 'relative'}}>
-
-            <div className='container-fluid' position='relative' float='left'>
-*/
+                                <MediaQuery key={`dsk${i}`} minWidth={992}>
+                                <MediaQuery key={`dskScaled${i}`} maxWidth={991}>
+                                <MediaQuery key={`mobile${i}`} maxDeviceWidth={900}>
+                                */

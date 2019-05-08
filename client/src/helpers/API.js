@@ -20,8 +20,6 @@ const axiosOverride = axios.create({
 })
 
 const htmlHeadersWithToken = () => {
-    console.log('DEBUG - htmlHeadersWithToken ', socket.connected)
-    console.log('DEBUG - htmlHeadersWithToken ', socket.id)
     let headers = {}
     if ( socket.connected ) {
         let jwtSignedToken = jwt.sign(
