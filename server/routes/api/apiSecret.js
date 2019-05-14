@@ -26,7 +26,7 @@ module.exports = {
         //
         // Allow testing without JWTs
         //
-        if ( process.env.API_WITH_TOKEN ) {
+        if ( process.env.API_WITH_TOKEN === 'true') {
             const io = req.app.get('socketio')
             const clientSockets = Object.keys(io.sockets.connected)
             let hashOfKnownClients = new Object()

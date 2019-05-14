@@ -34,7 +34,6 @@ class Factory extends Component {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     lockButtons = (factoryId) => {
-        console.log('DEBUG - factoryLocked ', factoryId)
         if ( this.props.factoryData.factoryId === factoryId )
             this.setState({factoryLocked: true})
     }
@@ -43,7 +42,6 @@ class Factory extends Component {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     unlockButtons = (factoryId) => {
-        console.log('DEBUG - factoryUnLocked ', factoryId)
         if ( this.props.factoryData.factoryId === factoryId )
             this.setState({factoryLocked: false})
     }
